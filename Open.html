@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>zainab Let's Go..</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
+  color: white;
+}
+
+/* Card */
+.card {
+  background: rgba(255,255,255,0.08);
+  border-radius: 25px;
+  padding: 25px;
+  width: 90%;
+  max-width: 360px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 30px rgba(255,255,255,0.2);
+  position: relative;
+  z-index: 3;
+  display: none;
+}
+
+h1 {
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #fff, 0 0 20px gold; }
+  to { text-shadow: 0 0 30px #fff, 0 0 60px gold; }
+}
+
+.name {
+  color: gold;
+  font-size: 26px;
+  margin: 10px 0;
+  animation: glow 2s infinite alternate;
+}
+
+.from {
+  margin-top: 15px;
+  color: #ccc;
+}
+
+/* Gift */
+.gift {
+  width: 120px;
+  height: 120px;
+  background: gold;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  font-weight: bold;
+}
+
+.lid {
+  width: 120px;
+  height: 30px;
+  background: #ffd700;
+  position: absolute;
+  top: -30px;
+  left: 0;
+  border-radius: 10px;
+  transition: 0.5s;
+}
+
+.open .lid {
+  transform: rotate(-30deg) translateY(-20px);
+}
+
+/* Photo */
+.photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 10px auto;
+  border: 2px solid gold;
+  object-fit: cover;
+  display: block;
+}
+
+/* Lanterns */
+.lantern {
+  position: absolute;
+  width: 20px;
+  height: 35px;
+  background: gold;
+  border-radius: 50%;
+  opacity: 0.6;
+  animation: float 6s infinite;
+  z-index: 1;
+}
+
+@keyframes float {
+  from { transform: translateY(100vh); }
+  to { transform: translateY(-10vh); }
+}
+
+/* Canvas */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+</style>
+</head>
+
+<body>
+
+<audio id="music" loop>
+  <source src="Eid_un_Sees.mpeg" type="audio/mpeg">
+</audio>
+
+<canvas id="fireworks"></canvas>
+
+<div class="gift" onclick="openGift(this)">
+  <div class="lid"></div>
+  Tap Here 🎁
+</div>
+
+<div class="card" id="card">
+  <h1>🌙 Eid Mubarak 🌙</h1>
+
+  <img src="ZAINAB123.jpg" class="photo">
+
+  <div class="name">Zainab 💖</div>
+
+  <p>May your Eid be filled with joy, laughter, and countless blessings. Hope this special day brings you happiness as bright as the crescent moon! 💖 ✨</p>
+
+  <p>🌙 تَقَبَّلَ اللَّهُ مِمَّا وَ مِنْكُمْ 🌙</p>
+
+  <div class="from">From Salha 💖</div>
+</div>
+
+<script>
+// Gift open
+function openGift(el) {
+  el.style.display = "none";
+  document.getElementById("card").style.display = "block";
+  document.getElementById("music").play().catch(()=>{});
+}
+
+// Lanterns
+for (let i = 0; i < 8; i++) {
+  let l = document.createElement("div");
+  l.className = "lantern";
+  l.style.left = Math.random()*100 + "vw";
+  l.style.animationDuration = (5+Math.random()*5)+"s";
+  document.body.appendChild(l);
+}
+
+// Fireworks
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let particles = [];
+
+function firework(x, y) {
+  const colors = ["red","blue","gold","white","pink","lime","cyan"];
+  const color = colors[Math.floor(Math.random()*colors.length)];
+
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x: x,
+      y: y,
+      dx: (Math.random() - 0.5) * 6,
+      dy: (Math.random() - 0.5) * 6,
+      life: 100,
+      color: color
+    });
+  }
+}
+
+function animate() {
+  ctx.fillStyle = "rgba(0,0,0,0.2)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+
+  particles.forEach((p, i) => {
+    p.x += p.dx;
+    p.y += p.dy;
+    p.life--;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 2.5, 0, Math.PI*2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+
+    if (p.life <= 0) particles.splice(i, 1);
+  });
+
+  requestAnimationFrame(animate);
+}
+
+setInterval(() => {
+  firework(Math.random()*canvas.width, Math.random()*canvas.height);
+}, 900);
+
+animate();
+</script>
+
+</body>
+</html>
